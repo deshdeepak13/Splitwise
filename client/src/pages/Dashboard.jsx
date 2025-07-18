@@ -7,7 +7,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-jshchldsksnjnkl
+
 const dummySpendingData = [
   { name: "Food", value: 400 },
   { name: "Travel", value: 300 },
@@ -15,7 +15,7 @@ const dummySpendingData = [
   { name: "Others", value: 200 },
 ];
 
-const COLORS = ["#6366f1", "#22c55e", "#facc15", "#f87171"];
+const COLORS = ["#818cf8", "#4ade80", "#facc15", "#f87171"];
 
 const dummyActivities = [
   { text: "You added ₹500 to Goa Trip", time: "2 hrs ago" },
@@ -43,90 +43,187 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
-      {/* LEFT SIDE */}
-      <div className="flex flex-col gap-6">
-        {/* Balance Summary */}
-        <div className="bg-white shadow rounded-xl p-4">
-          <h2 className="text-lg font-semibold mb-2">Total Balance Summary</h2>
-          <div className="flex justify-between text-sm">
-            <div className="text-green-600">You are owed: ₹{totalOwed}</div>
-            <div className="text-red-600">You owe: ₹{totalYouOwe}</div>
-            <div className="font-bold">Net: ₹{net}</div>
+    <div className="min-h-screen bg-gray-900 p-4 md:p-6">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* LEFT COLUMN */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Balance Summary Card */}
+          <div className="bg-gradient-to-r from-indigo-700 to-purple-800 rounded-2xl shadow-xl p-6 text-white">
+            <h2 className="text-xl font-bold mb-4">Balance Summary</h2>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="bg-white/5 p-3 rounded-xl backdrop-blur-sm border border-white/10">
+                <p className="text-sm text-gray-300">You're owed</p>
+                <p className="text-2xl font-bold text-green-400">₹{totalOwed}</p>
+              </div>
+              <div className="bg-white/5 p-3 rounded-xl backdrop-blur-sm border border-white/10">
+                <p className="text-sm text-gray-300">You owe</p>
+                <p className="text-2xl font-bold text-red-400">₹{totalYouOwe}</p>
+              </div>
+              <div className="bg-white/5 p-3 rounded-xl backdrop-blur-sm border border-white/10">
+                <p className="text-sm text-gray-300">Net Balance</p>
+                <p className={`text-2xl font-bold ${net >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  ₹{Math.abs(net)} {net >= 0 ? '' : '-'}
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
 
-        {/* Recent Activity */}
-        <div className="bg-white shadow rounded-xl p-4">
-          <h2 className="text-lg font-semibold mb-2">Recent Activity</h2>
-          <ul className="text-sm space-y-2">
-            {dummyActivities.map((act, idx) => (
-              <li key={idx} className="border-b pb-1">
-                <span className="block">{act.text}</span>
-                <span className="text-xs text-gray-400">{act.time}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Goal Tracker */}
-        <div className="bg-white shadow rounded-xl p-4">
-          <h2 className="text-lg font-semibold mb-2">
-            Goal: {goal.title}
-          </h2>
-          <div className="w-full bg-gray-200 h-4 rounded-full">
-            <div
-              className="bg-blue-500 h-4 rounded-full"
-              style={{ width: `${(goal.current / goal.target) * 100}%` }}
-            ></div>
-          </div>
-          <p className="text-xs mt-1">
-            ₹{goal.current} of ₹{goal.target} saved
-          </p>
-        </div>
-
-        {/* AI Insights */}
-        <div className="bg-white shadow rounded-xl p-4">
-          <h2 className="text-lg font-semibold mb-2">AI Insight</h2>
-          <p className="text-sm text-gray-700">
-            You spent <strong>30% more on Food</strong> this month than last
-            month. Consider cutting down on dining out.
-          </p>
-        </div>
-
-        {/* Reminders */}
-        <div className="bg-white shadow rounded-xl p-4">
-          <h2 className="text-lg font-semibold mb-2">Upcoming Reminders</h2>
-          <ul className="text-sm list-disc ml-5 text-gray-700">
-            {reminders.map((r, idx) => (
-              <li key={idx}>{r}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      {/* RIGHT SIDE */}
-      <div className="bg-white shadow rounded-xl p-6">
-        <h2 className="text-lg font-semibold mb-4">Monthly Spending Chart</h2>
-        <ResponsiveContainer width="100%" height={300}>
-          <PieChart>
-            <Pie
-              data={dummySpendingData}
-              dataKey="value"
-              nameKey="name"
-              cx="50%"
-              cy="50%"
-              outerRadius={100}
-              label
-            >
-              {dummySpendingData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          {/* Recent Activity */}
+          <div className="bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-700">
+            <div className="p-6 border-b border-gray-700">
+              <h2 className="text-xl font-bold text-white">Recent Activity</h2>
+            </div>
+            <ul className="divide-y divide-gray-700">
+              {dummyActivities.map((act, idx) => (
+                <li key={idx} className="p-4 hover:bg-gray-750 transition-colors">
+                  <div className="flex justify-between">
+                    <p className="text-gray-200">{act.text}</p>
+                    <span className="text-xs text-gray-400">{act.time}</span>
+                  </div>
+                </li>
               ))}
-            </Pie>
-            <Tooltip />
-            <Legend />
-          </PieChart>
-        </ResponsiveContainer>
+            </ul>
+            <div className="p-4 text-center border-t border-gray-700">
+              <button className="text-indigo-400 text-sm font-medium hover:text-indigo-300">
+                View All Activity
+              </button>
+            </div>
+          </div>
+
+          {/* Goal Tracker */}
+          <div className="bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-700">
+            <h2 className="text-xl font-bold text-white mb-4">
+              Goal: {goal.title}
+            </h2>
+            <div className="mb-2 flex justify-between text-sm text-gray-400">
+              <span>₹{goal.current} saved</span>
+              <span>₹{goal.target} target</span>
+            </div>
+            <div className="w-full bg-gray-700 h-3 rounded-full overflow-hidden">
+              <div
+                className="bg-gradient-to-r from-blue-500 to-indigo-600 h-full rounded-full"
+                style={{ width: `${(goal.current / goal.target) * 100}%` }}
+              ></div>
+            </div>
+            <p className="text-right mt-1 text-sm text-gray-400">
+              {Math.round(goal.current / goal.target) * 100}% completed
+            </p>
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN */}
+        <div className="space-y-6">
+          {/* Spending Chart */}
+          <div className="bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-700">
+            <h2 className="text-xl font-bold text-white mb-4">
+              Monthly Spending
+            </h2>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={dummySpendingData}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={80}
+                    paddingAngle={2}
+                    label={({ name, percent }) => (
+                      <text 
+                        fill="white" 
+                        fontSize={12}
+                        x={0}
+                        y={0}
+                        textAnchor="middle"
+                        dominantBaseline="central"
+                      >
+                        {`${name} ${(percent * 100).toFixed(0)}%`}
+                      </text>
+                    )}
+                  >
+                    {dummySpendingData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    formatter={(value) => [`₹${value}`, 'Amount']}
+                    contentStyle={{
+                      backgroundColor: '#1f2937',
+                      borderRadius: '8px',
+                      border: '1px solid #374151',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                      color: 'white'
+                    }}
+                    itemStyle={{ color: 'white' }}
+                  />
+                  <Legend 
+                    layout="vertical" 
+                    verticalAlign="middle" 
+                    align="right"
+                    wrapperStyle={{
+                      color: 'white',
+                      paddingLeft: '20px'
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* AI Insights */}
+          <div className="bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl shadow-xl p-6 border border-gray-700">
+            <div className="flex items-start mb-3">
+              <div className="bg-indigo-900 p-2 rounded-lg mr-3">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-white">AI Insight</h2>
+                <p className="text-sm text-gray-300 mt-1">
+                  You spent <span className="font-bold text-indigo-400">30% more on Food</span> this month than last month. Consider cutting down on dining out.
+                </p>
+              </div>
+            </div>
+            <button className="mt-3 text-sm font-medium text-indigo-400 hover:text-indigo-300 flex items-center">
+              Get personalized tips
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Reminders */}
+          <div className="bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-700">
+            <div className="p-6 border-b border-gray-700">
+              <h2 className="text-xl font-bold text-white">Reminders</h2>
+            </div>
+            <ul className="divide-y divide-gray-700">
+              {reminders.map((r, idx) => (
+                <li key={idx} className="p-4 hover:bg-gray-750 transition-colors">
+                  <div className="flex items-start">
+                    <div className="bg-red-900/50 p-1 rounded-full mr-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <p className="text-gray-200">{r}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <div className="p-4 text-center border-t border-gray-700">
+              <button className="text-indigo-400 text-sm font-medium hover:text-indigo-300 flex items-center justify-center w-full">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                Add Reminder
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
