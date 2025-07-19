@@ -8,7 +8,7 @@ import {
 import Dashboard from "./pages/Dashboard";
 import Navbar from "./utils/Navbar";
 import Friends from "./pages/Friends";
-import Friend from "./components/Friend";
+import Friend from "./components/friend/Friend";
 import Header from "./utils/Header";
 import Settings from "./pages/Settings";
 import Groups from "./pages/Groups";
