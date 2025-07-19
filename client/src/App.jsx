@@ -11,6 +11,9 @@ import Friends from "./pages/Friends";
 import Friend from "./components/Friend";
 import Header from "./utils/Header";
 import Settings from "./pages/Settings";
+import Groups from "./pages/Groups";
+import Group from "./components/Group";
+import Activity from "./pages/Activity";
 const App = () => {
   return (
     <Router>
@@ -26,6 +29,10 @@ const App = () => {
             <Route path="/friends" element={<Friends />} />
             <Route path="/friend/:friendId" element={<Friend />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/groups" element={<Groups />} />
+            <Route path="/group/:groupId" element={<Group />} />
+            <Route path="/activity" element={<Activity />} />
+
           </Routes>
         </div>
 
