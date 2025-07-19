@@ -17,6 +17,7 @@ import Activity from "./pages/Activity";
 import AddExpense from "./components/AddExpense";
 import GroupList from "./components/GroupList";
 import CreateGroup from "./components/CreateGroup";
+import AuthPage from "./pages/AuthPage";
 const App = () => {
   return (
     <Router>
@@ -37,6 +38,7 @@ const App = () => {
             <Route path="/activity" element={<Activity />} />
             <Route path="/group/:groupId/add-expense" element={<AddExpense />} />
             <Route path="/" element={<GroupList />} />
+            <Route path="/auth" element={<AuthPage />} />
             <Route path="/create-group" element={<CreateGroup />} />
 
 

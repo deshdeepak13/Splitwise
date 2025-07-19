@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaMoneyBillTransfer } from "react-icons/fa6";
 
 // Utility function to get initials from name
 const getInitials = (name) => {
@@ -15,12 +16,17 @@ const Header = ({ userName = "John Doe" }) => {
       
       {/* Left Section: Logo + App Name */}
       <div className="flex items-center gap-3">
-        <img
-          src="/logo.png" 
-          alt="App Logo"
+        {/* <img
+          src="/logxo.png" 
+          alt="Sपे"
           className="w-10 h-10 object-cover"
-        />
-        <h1 className="text-xl font-bold text-emerald-300">SplitPe</h1>
+        /> */}
+
+        <h1 className="text-2xl font-bold text-purple-500 flex">
+          <div className='text-gray-300'>Split</div>
+          <div className='pt-1 text-3xl'>पे</div>
+        </h1>
+        {/* <h1 className="text-2xl font-bold text-purple-500 pt-1 mx-0">पे</h1> */}
       </div>
 
       {/* Right Section: User Name + Avatar */}
