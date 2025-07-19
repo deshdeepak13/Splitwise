@@ -1,27 +1,36 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Dashboard from './pages/Dashboard';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
 import Navbar from "./utils/Navbar";
-
+import Friends from "./pages/Friends";
+import Friend from "./components/Friend";
+import Header from "./utils/Header";
+import Settings from "./pages/Settings";
 const App = () => {
   return (
     <Router>
-      <div className="flex h-screen bg-gray-900">
-        {/* Sidebar Navigation */}
-        <Navbar />
+      <div className="flex flex-col min-h-screen bg-gray-900">
+
+        {/* Header */}
+        <Header userName="Bhupendra Jogi" />
 
         {/* Main Content */}
-        <div className="flex-1 overflow-y-auto p-4 md:p-6">
+        <div className="flex-grow overflow-y-auto p-4 pb-30">
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            {/* Uncomment these when you implement the other pages */}
-            {/* <Route path="/groups" element={<Groups />} /> */}
-            {/* <Route path="/friends" element={<Friends />} /> */}
-            {/* <Route path="/activity" element={<Activity />} /> */}
-            {/* <Route path="/settings" element={<Settings />} /> */}
-            {/* <Route path="/profile" element={<Profile />} /> */}
+            <Route path="/friends" element={<Friends />} />
+            <Route path="/friend/:friendId" element={<Friend />} />
+            <Route path="/settings" element={<Settings />} />
           </Routes>
         </div>
+
+        {/* Bottom Navbar */}
+        <Navbar />
       </div>
     </Router>
   );
