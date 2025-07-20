@@ -6,7 +6,7 @@ import authRoutes from './src/routes/authRoutes.js';
 
 // Load env variables
 dotenv.config();
-
+ 
 // Connect DB
 connectDB();
 

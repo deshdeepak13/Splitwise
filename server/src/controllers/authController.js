@@ -2,10 +2,14 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/userSchema.js";
 
-const JWT_SECRET = process.env.JWT_SECRET;
+
+
 
 // Utility: Generate JWT
 const generateToken = (user) => {
+  // console.log(JWT_SECRET);
+  // console.log(process.env.JWT_SECRET)
+  const JWT_SECRET = process.env.JWT_SECRET;
   return jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "7d" });
 };
 
@@ -37,10 +41,11 @@ export const registerUser = async (req, res) => {
       token,
     });
   } catch (err) {
-    res.status(500).json({ message: "Server error", error: err.message });
+    // console.log(err);
+    res.status(500).json({ message: "Server error", error: err });
   }
 };
-
+ 
 // @desc   Login user
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
