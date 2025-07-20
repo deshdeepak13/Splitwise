@@ -18,7 +18,12 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
+      // required: true,
+    },
+    provider: {
+      type: String,
+      enum: ["local", "google", "github"],
+      default: "local",
     },
     profilePic: {
       type: String,
@@ -44,6 +49,15 @@ const userSchema = new Schema(
         ref: "User",
       },
     ],
+    resetToken: String,
+    resetTokenExpiry: Date,
+
+    twoFactorEnabled: {
+      type: Boolean,
+      default: false,
+    },
+    twoFactorSecret: String,
+    
     createdAt: {
       type: Date,
       default: Date.now,
