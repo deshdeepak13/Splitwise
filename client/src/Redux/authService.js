@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000/api/auth/';
+const API_URL = '/api/v1/';
 
-const register = async (userData) => {
-  const res = await axios.post(API_URL + 'register', userData);
+const signup = async (userData) => {
+  const res = await axios.post(API_URL + 'signup', userData);
   return res.data;
 };
 
@@ -19,4 +19,4 @@ const getMe = async (token) => {
   return res.data;
 };
 
-export const authService = { register, login, getMe };
+export const authService = { signup, login, getMe };

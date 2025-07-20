@@ -1,16 +1,24 @@
-// src/components/PrivateRoute.jsx
 import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
 const PrivateRoute = ({ children }) => {
-  const isAuthenticated = useSelector((state) => state.auth?.isAuthenticated);
+  const { isAuthenticated, isLoading } = useSelector((state) => ({
+    isAuthenticated: state.auth?.isAuthenticated,
+    isLoading: state.auth?.loading, // Optional: Handle loading state
+  }));
 
-  // 🛑 Only navigate if not authenticated
-  if (!isAuthenticated) {
-    return <Navigate to="/auth" replace />;
+  // 1️⃣ Handle loading state (if auth check is async)
+  if (isLoading) {
+    return <div>Loading...</div>; // Replace with a spinner
   }
 
-  return children;
+  // 2️⃣ Redirect to Login if not authenticated
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />; // Changed from "/auth" to "/login"
+  }
+
+  // 3️⃣ Render children (or <Outlet /> for nested routes)
+  return children ? children : <Outlet />;
 };
 
 export default PrivateRoute;

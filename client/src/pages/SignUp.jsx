@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { register } from '../features/auth/authSlice';
+import { signup } from '../Redux/authSlice'; // ✅ Updated import
 import { useState } from 'react';
 
 function SignUp() {
@@ -13,7 +13,7 @@ function SignUp() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(register(form));
+    dispatch(signup(form)); // ✅ Changed from `register` to `signup`
   };
 
   return (

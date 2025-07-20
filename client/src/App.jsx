@@ -19,7 +19,8 @@ import Activity from "./pages/Activity";
 import AddExpense from "./components/AddExpense";
 import GroupList from "./components/GroupList";
 import CreateGroup from "./components/CreateGroup";
-import AuthPage from "./pages/AuthPage";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
 import PrivateRoute from "./components/PrivateRoute";
 
 const App = () => {
@@ -33,7 +34,9 @@ const App = () => {
         <div className="flex-grow overflow-y-auto p-4 pb-30">
           <Routes>
             {/* Public route */}
-            <Route path="/auth" element={<AuthPage />} />
+            {/* <Route path="/auth" element={<AuthPage />} /> */}
+            <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<SignUp />} />
 
             {/* Private routes */}
             <Route
@@ -118,7 +121,7 @@ const App = () => {
             />
 
             {/* Fallback: redirect to / if path not found */}
-            <Route path="*" element={<Navigate to="/" />} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
         </div>
         {token && <Navbar />}

@@ -1,15 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// Register thunk
-export const register = createAsyncThunk(
-  'auth/register',
+// Signup thunk
+export const signup = createAsyncThunk(
+  'auth/signup',
   async (formData, { rejectWithValue }) => {
     try {
-      const res = await axios.post('/api/v1/auth/register', formData);
+      const res = await axios.post('/api/v1/signup', formData);
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response.data.message || 'Registration failed');
+      return rejectWithValue(err.response?.data?.message || 'Registration failed');
     }
   }
 );
@@ -19,10 +19,10 @@ export const login = createAsyncThunk(
   'auth/login',
   async (formData, { rejectWithValue }) => {
     try {
-      const res = await axios.post('/api/v1/auth/login', formData);
+      const res = await axios.post('/api/v1/login', formData);
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response.data.message || 'Login failed');
+      return rejectWithValue(err.response?.data?.message || 'Login failed');
     }
   }
 );
@@ -45,18 +45,18 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Register
-      .addCase(register.pending, (state) => {
+      // Signup
+      .addCase(signup.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(register.fulfilled, (state, action) => {
+      .addCase(signup.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload.user;
         state.token = action.payload.token;
         localStorage.setItem('token', action.payload.token);
       })
-      .addCase(register.rejected, (state, action) => {
+      .addCase(signup.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       })

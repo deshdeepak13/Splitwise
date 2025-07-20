@@ -8,8 +8,13 @@ import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
+// ✅ Match frontend endpoint: POST /api/v1/auth/register
 router.post("/register", registerUser);
+
+// ✅ Match frontend endpoint: POST /api/v1/auth/login
 router.post("/login", loginUser);
-router.get("/me", protect, getMe); // protected route
+
+// ✅ Protected route to get current user
+router.get("/me", protect, getMe);
 
 export default router;
