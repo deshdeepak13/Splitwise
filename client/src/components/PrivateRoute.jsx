@@ -2,10 +2,15 @@ import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 
 const PrivateRoute = ({ children }) => {
-  const { isAuthenticated, isLoading } = useSelector((state) => ({
-    isAuthenticated: state.auth?.isAuthenticated,
-    isLoading: state.auth?.loading, // Optional: Handle loading state
-  }));
+
+  
+  const {error,token,isLoading} = useSelector((state) => state.auth);
+  const isAuthenticated = token?true:false;
+
+  // const { isLoading } = useSelector((state) => ({
+  //   // isAuthenticated: state.auth?.isAuthenticated,
+  //   isLoading: state.auth?.loading // Optional: Handle loading state
+  // }));
 
   // 1️⃣ Handle loading state (if auth check is async)
   if (isLoading) {

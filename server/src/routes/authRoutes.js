@@ -9,7 +9,7 @@ import { protect } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 // ✅ Match frontend endpoint: POST /api/v1/auth/register
-router.post("/register", registerUser);
+router.post("/signup", registerUser);
 
 // ✅ Match frontend endpoint: POST /api/v1/auth/login
 router.post("/login", loginUser);

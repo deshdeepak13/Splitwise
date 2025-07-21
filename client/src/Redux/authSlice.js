@@ -1,13 +1,32 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import authService from './authService';
+// import axios from 'axios';
+import {jwtDecode} from "jwt-decode";
+
+
+const token = localStorage.getItem('token');
+
+// ✅ Helper to validate token
+const isTokenValid = (token) => {
+  if (!token) return false;
+  try {
+    const { exp } = jwtDecode(token);
+    // Check if token expired
+    if (exp * 1000 < Date.now()) return false;
+    return true;
+  } catch (err) {
+    return false;
+  }
+};
 
 // Signup thunk
 export const signup = createAsyncThunk(
   'auth/signup',
   async (formData, { rejectWithValue }) => {
     try {
-      const res = await axios.post('/api/v1/signup', formData);
-      return res.data;
+      // const res = await axios.post('http://localhost:3000/api/auth/signup', formData);
+      return await authService.signup(formData);
+      // return res.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || 'Registration failed');
     }
@@ -19,8 +38,9 @@ export const login = createAsyncThunk(
   'auth/login',
   async (formData, { rejectWithValue }) => {
     try {
-      const res = await axios.post('/api/v1/login', formData);
-      return res.data;
+      // const res = await axios.post('http://localhost:3000/api/auth/login', formData);
+      return await authService.login(formData);
+      // return res.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || 'Login failed');
     }
@@ -32,7 +52,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState: {
     user: null,
-    token: null,
+    token: isTokenValid(token) ? token : null,
     isLoading: false,
     error: null,
   },

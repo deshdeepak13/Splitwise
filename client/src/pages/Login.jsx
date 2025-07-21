@@ -1,15 +1,18 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../Redux/authSlice';
+import { login } from '../redux/authSlice';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FiMail, FiLock, FiLoader, FiArrowRight,FiEye,FiEyeOff } from 'react-icons/fi';
 
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLoading, error, isAuthenticated } = useSelector((state) => state.auth);
+  const { isLoading, error, token } = useSelector((state) => state.auth);
+  const isAuthenticated = token ? true : false;
 
   const [form, setForm] = useState({ email: '', password: '' });
   const [touched, setTouched] = useState({ email: false, password: false });
+  const [showPassword, setShowPassword] = useState(false);
 
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
   const isPasswordValid = form.password.length >= 6;
@@ -33,7 +36,7 @@ export default function Login() {
     try {
       const resultAction = await dispatch(login(form));
       if (login.fulfilled.match(resultAction)) {
-        navigate('/dashboard');
+        navigate('/');
       }
     } catch (err) {
       // Error is handled in Redux
@@ -41,65 +44,178 @@ export default function Login() {
   };
 
   if (isAuthenticated) {
-    navigate('/dashboard');
+    navigate('/');
     return null;
   }
 
   return (
-    <div className="max-w-sm mx-auto mt-10 p-6 bg-white rounded shadow">
-      <h2 className="text-xl font-semibold text-center mb-4">Login</h2>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <div className="bg-gray-800/80 backdrop-blur-sm border border-gray-700/50 rounded-xl shadow-xl p-8">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="mx-auto w-16 h-16 bg-blue-600/10 rounded-2xl flex items-center justify-center mb-4">
+              <FiLock className="w-7 h-7 text-blue-400" />
+            </div>
+            <h2 className="text-2xl font-bold text-white">Welcome back</h2>
+            <p className="text-gray-400 mt-2">Sign in to access your account</p>
+          </div>
 
-      {error && <div className="text-red-500 text-sm text-center mb-4">{error}</div>}
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="email" className="block text-sm mb-1">Email</label>
-          <input
-            id="email"
-            type="email"
-            name="email"
-            placeholder="Enter your email"
-            value={form.email}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className={`w-full p-2 border rounded ${touched.email && !isEmailValid ? 'border-red-500' : ''}`}
-            required
-          />
-          {touched.email && !isEmailValid && (
-            <p className="text-xs text-red-500 mt-1">Please enter a valid email.</p>
+          {/* Error Message */}
+          {error && (
+            <div className="mb-6 p-3 bg-red-900/50 border border-red-800/50 rounded-lg text-red-300 text-sm text-center">
+              {error}
+            </div>
           )}
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Email Field */}
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
+                Email address
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
+                  <FiMail className="h-5 w-5" />
+                </div>
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="you@example.com"
+                  value={form.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className={`w-full pl-10 pr-3 py-3 bg-gray-700/50 border ${
+                    touched.email && !isEmailValid
+                      ? 'border-red-500 focus:ring-red-500'
+                      : 'border-gray-600 focus:ring-blue-500 focus:border-blue-500'
+                  } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 transition-all`}
+                />
+              </div>
+              {touched.email && !isEmailValid && (
+                <p className="mt-1 text-xs text-red-400">Please enter a valid email address</p>
+              )}
+            </div>
+
+            {/* Password Field */}
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-1">
+                Password
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
+                  <FiLock className="h-5 w-5" />
+                </div>
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  name="password"
+                  placeholder="••••••••"
+                  value={form.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className={`w-full pl-10 pr-10 py-3 bg-gray-700/50 border ${
+                    touched.password && !isPasswordValid
+                      ? 'border-red-500 focus:ring-red-500'
+                      : 'border-gray-600 focus:ring-blue-500 focus:border-blue-500'
+                  } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 transition-all`}
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <FiEyeOff className="h-5 w-5" />
+                  ) : (
+                    <FiEye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
+              {touched.password && !isPasswordValid && (
+                <p className="mt-1 text-xs text-red-400">Password must be at least 6 characters</p>
+              )}
+            </div>
+
+            {/* Remember Me & Forgot Password */}
+            {/* <div className="flex items-center justify-between">
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-600 rounded bg-gray-700"
+                />
+                <span className="ml-2 text-sm text-gray-300">Remember me</span>
+              </label>
+              <a
+                href="/forgot-password"
+                className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+              >
+                Forgot password?
+              </a>
+            </div> */}
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={!isFormValid || isLoading}
+              className={`w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-white font-medium transition-all ${
+                isFormValid && !isLoading
+                  ? 'bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 shadow-lg hover:shadow-blue-500/20'
+                  : 'bg-gray-700 cursor-not-allowed'
+              }`}
+            >
+              {isLoading ? (
+                <>
+                  <FiLoader className="animate-spin h-5 w-5" />
+                  <span>Signing in...</span>
+                </>
+              ) : (
+                <>
+                  <span>Sign in</span>
+                  <FiArrowRight className="h-5 w-5" />
+                </>
+              )}
+            </button>
+          </form>
+
+          {/* Divider */}
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-700/50" />
+            </div>
+            <div className="relative flex justify-center">
+              <span className="px-3 bg-gray-800 text-sm text-gray-400 rounded-full">
+                Or continue with
+              </span>
+            </div>
+          </div>
+
+          {/* Social Login Buttons */}
+          <div className="grid grid-cols-1 gap-3">
+            <button
+              type="button"
+              className="w-full flex items-center justify-center gap-3 py-3 px-4 border border-gray-700 rounded-lg text-white hover:bg-gray-700/30 transition-colors"
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12.545 10.239v3.821h5.445c-0.712 2.315-2.647 3.972-5.445 3.972-3.332 0-6.033-2.701-6.033-6.032s2.701-6.032 6.033-6.032c1.498 0 2.866 0.549 3.921 1.453l2.814-2.814c-1.784-1.664-4.152-2.675-6.735-2.675-5.522 0-10 4.477-10 10s4.478 10 10 10c8.396 0 10-7.496 10-10 0-0.67-0.069-1.325-0.189-1.955h-9.811z" />
+              </svg>
+              <span>Continue with Google</span>
+            </button>
+          </div>
+
+          {/* Sign Up Link */}
+          <div className="mt-6 text-center text-sm text-gray-400">
+            Don't have an account?{' '}
+            <a
+              href="/signup"
+              className="font-medium text-blue-400 hover:text-blue-300 transition-colors"
+            >
+              Sign up
+            </a>
+          </div>
         </div>
-
-        <div>
-          <label htmlFor="password" className="block text-sm mb-1">Password</label>
-          <input
-            id="password"
-            type="password"
-            name="password"
-            placeholder="Enter your password"
-            value={form.password}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className={`w-full p-2 border rounded ${touched.password && !isPasswordValid ? 'border-red-500' : ''}`}
-            required
-          />
-          {touched.password && !isPasswordValid && (
-            <p className="text-xs text-red-500 mt-1">Password must be at least 6 characters.</p>
-          )}
-        </div>
-
-        <button
-          type="submit"
-          disabled={!isFormValid || isLoading}
-          className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 disabled:opacity-50"
-        >
-          {isLoading ? 'Logging in...' : 'Login'}
-        </button>
-      </form>
-
-      <div className="mt-4 flex justify-between text-sm text-indigo-600">
-        <a href="/forgot-password" className="hover:underline">Forgot password?</a>
-        <a href="/signup" className="hover:underline">Create an account</a>
       </div>
     </div>
   );

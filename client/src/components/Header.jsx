@@ -1,5 +1,6 @@
 import React from 'react';
-import { FaMoneyBillTransfer } from "react-icons/fa6";
+import { useSelector } from 'react-redux';
+// import { FaMoneyBillTransfer } from "react-icons/fa6";
 
 // Utility function to get initials from name
 const getInitials = (name) => {
@@ -8,7 +9,14 @@ const getInitials = (name) => {
   return (names[0][0] + names[names.length - 1][0]).toUpperCase();
 };
 
-const Header = ({ userName = "John Doe" }) => {
+const Header = () => {
+  
+  const {user} = useSelector((state) => state.auth);
+  const userName = user.name || "X X";
+  // console.log("User: ",user.name);
+  // const userName = "John Doe"; 
+
+
   const initials = getInitials(userName);
 
   return (

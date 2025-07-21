@@ -8,10 +8,10 @@ import {
 import { useSelector } from "react-redux";
 
 import Dashboard from "./pages/Dashboard";
-import Navbar from "./utils/Navbar";
+import Navbar from "./components/Navbar";
 import Friends from "./pages/Friends";
 import Friend from "./components/friend/Friend";
-import Header from "./utils/Header";
+import Header from "./components/Header";
 import Settings from "./pages/Settings";
 import Groups from "./pages/Groups";
 import Group from "./components/Group";
@@ -25,12 +25,15 @@ import PrivateRoute from "./components/PrivateRoute";
 
 const App = () => {
   const { token } = useSelector((state) => state.auth); // 🔐 check login status
+  // console.log(token);
 
   return (
     <Router>
       <div className="flex flex-col min-h-screen bg-gray-900">
         {/* Show Header and Navbar only if logged in */}
-        {token && <Header />}
+        {
+        token && 
+        <Header />}
         <div className="flex-grow overflow-y-auto p-4 pb-30">
           <Routes>
             {/* Public route */}
@@ -56,7 +59,7 @@ const App = () => {
               }
             />
             <Route
-              path="/friend/:friendId"
+              path="/friend/:friendshipId"
               element={
                 <PrivateRoute>
                   <Friend />
@@ -124,7 +127,9 @@ const App = () => {
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
         </div>
-        {token && <Navbar />}
+        {
+        token && 
+        <Navbar />}
       </div>
     </Router>
   );

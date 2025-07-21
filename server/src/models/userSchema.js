@@ -43,12 +43,12 @@ const userSchema = new Schema(
         ref: "Goal",
       },
     ],
-    friends: [
-      {
-        type: Types.ObjectId,
-        ref: "User",
-      },
-    ],
+    // friends: [
+    //   {
+    //     type: Types.ObjectId,
+    //     ref: "User",
+    //   },
+    // ],
     resetToken: String,
     resetTokenExpiry: Date,
 

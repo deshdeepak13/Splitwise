@@ -2,10 +2,15 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { connectDB } from './src/config/db.js';
+
+dotenv.config();
+
 import authRoutes from './src/routes/authRoutes.js';
+import friendRoutes from './src/routes/friendRoutes.js';
+import expenseRoutes from './src/routes/expenseRoutes.js'
+import userRoutes from './src/routes/userRoutes.js';
 
 // Load env variables
-dotenv.config();
  
 // Connect DB
 connectDB();
@@ -19,6 +24,9 @@ app.use(express.json());
 
 // Routes
 app.use('/api/auth', authRoutes); // ✅ Auth route
+app.use('/api/friends', friendRoutes); 
+app.use('/api/expenses', expenseRoutes); 
+app.use('/api/users', userRoutes); 
 
 // Root route
 app.get('/', (req, res) => {

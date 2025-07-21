@@ -7,27 +7,21 @@ const expenseSchema = new Schema({
   groupId: {
     type: Types.ObjectId,
     ref: 'Group',
-    required: true,
+    default: null,
   },
+  friendIds: [{
+    type: Types.ObjectId,
+    ref: 'User',
+    default: [],
+  }],
   paidBy: {
     type: Types.ObjectId,
     ref: 'User',
     required: true,
   },
-  description: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  amount: {
-    type: Number,
-    required: true,
-    min: 0,
-  },
-  currency: {
-    type: String,
-    default: 'INR',
-  },
+  description: { type: String, required: true, trim: true },
+  amount: { type: Number, required: true, min: 0 },
+  currency: { type: String, default: 'INR' },
   splitBetween: [{
     type: Types.ObjectId,
     ref: 'User',
@@ -40,13 +34,10 @@ const expenseSchema = new Schema({
   },
   splitDetails: {
     type: Map,
-    of: Number, // userId (string) -> amount
+    of: Number,
     default: {},
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
 }, { timestamps: true });
+
 
 export default model('Expense', expenseSchema);
