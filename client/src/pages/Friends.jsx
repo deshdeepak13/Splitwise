@@ -30,6 +30,7 @@ const Friends = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [searchClicked, setSearchClicked] = useState(false);
   const { token } = useSelector((state) => state.auth);
+  
 
   useEffect(() => {
     const fetchFriendsData = async () => {

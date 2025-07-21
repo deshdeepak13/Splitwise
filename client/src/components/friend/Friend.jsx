@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
+import AddExpense from "../AddExpense";
 
 // Mock Data
 // const mockFriendDetails = {
@@ -46,6 +47,7 @@ const Friend = () => {
   const [loading, setLoading] = useState(true);
   const [newMessage, setNewMessage] = useState("");
   const [activeTab, setActiveTab] = useState("expenses");
+  const [isAddExpenseModalOpen, setIsAddExpenseModalOpen] = useState(false);
 
   const { token, user } = useSelector((state) => state.auth);
   const decodedToken = jwtDecode(token);
@@ -56,16 +58,22 @@ const Friend = () => {
     setLoading(true);
     const fetchFriendAndExpenses = async () => {
       try {
-        const friendRes = await axios.get(`http://localhost:3000/api/friends/friend/${friendshipId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const friendRes = await axios.get(
+          `http://localhost:3000/api/friends/friend/${friendshipId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setFriend(friendRes.data);
         // console.log(friendRes.data);
 
         const friendId = friendRes.data.friendId;
-        const expensesRes = await axios.get(`http://localhost:3000/api/expenses/friend/${decodedToken.id}/${friendId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const expensesRes = await axios.get(
+          `http://localhost:3000/api/expenses/friend/${decodedToken.id}/${friendId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setExpenses(expensesRes.data);
         // console.log("Fr:",friendRes.data);
         // console.log("Ex:",expensesRes.data);
@@ -269,7 +277,10 @@ const Friend = () => {
             </div>
           </div>
           <div className="ml-auto flex items-center gap-3">
-            <button className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+            <button
+              onClick={() => setIsAddExpenseModalOpen(true)}
+              className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -470,6 +481,11 @@ const Friend = () => {
           </div>
         </div>
       </div>
+      <AddExpenseModal
+        isOpen={isAddExpenseModalOpen}
+        onClose={() => setIsAddExpenseModalOpen(false)}
+        friends={friends} // Pass your friends list
+      />
     </div>
   );
 };
