@@ -1,5 +1,6 @@
 import Friendship from "../models/friendshipSchema.js";
 import User from "../models/userSchema.js";
+import Balance from "../models/balanceSchema.js";
 
 // Send Friend Request
 export const sendFriendRequest = async (req, res) => {
@@ -131,6 +132,7 @@ export const getSentRequests = async (req, res) => {
 };
 
 //Single Friend Detail
+
 // export const getFriendDetail = async (req, res) => {
 //   const { friendId } = req.params;
 //   const friend = await User.findById(friendId).select("-password");
@@ -138,22 +140,20 @@ export const getSentRequests = async (req, res) => {
 //   res.json(friend);
 // };
 
+
+
 export const getFriendDetail = async (req, res) => {
-  const userId = req.user._id; // The logged-in user's ID
-  const { friendshipId } = req.params; // The ID of the specific friendship document
+  const userId = req.user._id;
+  const { friendshipId } = req.params;
 
   try {
-    const friendship = await Friendship.findById(friendshipId).populate(
-      "requester recipient",
-      "name email profilePic" // Ensure these are populated
-    );
+    const friendship = await Friendship.findById(friendshipId)
+      .populate("requester recipient", "name email profilePic");
 
-    // 1. Check if the friendship exists
     if (!friendship) {
       return res.status(404).json({ message: "Friendship not found." });
     }
 
-    // 2. Ensure the logged-in user is part of this friendship
     const isRequester = friendship.requester._id.toString() === userId.toString();
     const isRecipient = friendship.recipient._id.toString() === userId.toString();
 
@@ -161,32 +161,49 @@ export const getFriendDetail = async (req, res) => {
       return res.status(403).json({ message: "Unauthorized: You are not part of this friendship." });
     }
 
-    // 3. Determine the friend's data (the other user in the friendship)
-    let friend;
-    if (isRequester) {
-      friend = friendship.recipient; // If current user is requester, recipient is the friend
-    } else {
-      friend = friendship.requester; // If current user is recipient, requester is the friend
+    // Identify friend
+    const friend = isRequester ? friendship.recipient : friendship.requester;
+
+    // Always sort user IDs to match Balance schema
+    const [user1, user2] = [userId.toString(), friend._id.toString()].sort();
+
+    const balance = await Balance.findOne({ user1, user2 });
+
+    // Calculate balance w.r.t. logged-in user
+    let otherBalance = 0;
+    let groupBalances = {};
+    let lastSettledAt = null;
+
+    if (balance) {
+      const isUser1 = userId.toString() === user1;
+      otherBalance = isUser1 ? balance.otherBalance : -balance.otherBalance;
+
+      // You can skip groupBalances if not needed right now
+      for (const [groupId, val] of balance.groupBalances.entries()) {
+        groupBalances[groupId] = isUser1 ? val : -val;
+      }
+
+      lastSettledAt = balance.lastSettledAt;
     }
 
-    // 4. Construct the response object with friendId and other details
     const responseData = {
-      friendshipId: friendship._id,     // The ID of the Friendship document itself
-      friendId: friend._id,             // The friend's User ID (renamed from _id)
+      friendshipId: friendship._id,
+      friendId: friend._id,
       name: friend.name,
       email: friend.email,
       profilePic: friend.profilePic,
-      status: friendship.status,        // Status of this specific friendship (e.g., "accepted", "pending")
-      // You can add other fields from the 'friend' object or friendship document here as needed
-      // For example:
-      // createdAt: friendship.createdAt,
-      // updatedAt: friendship.updatedAt,
-      // lastActivity: friend.lastActivity // If 'lastActivity' is part of your User model and populated
+      status: friendship.status,
+      balance: {
+        otherBalance,
+        groupBalances,
+        lastSettledAt,
+      },
     };
 
     res.json(responseData);
+
   } catch (error) {
-    console.error("Error fetching single friend detail:", error);
+    console.error("Error fetching friend detail:", error);
     res.status(500).json({ message: "Server error." });
   }
 };

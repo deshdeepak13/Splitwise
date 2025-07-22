@@ -20,7 +20,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed bottom-4 left-0 right-0 px-4 z-50">
+    <nav className="fixed bottom-4 left-0 right-0 px-4 z-40">
       <div className="bg-gray-800/95 backdrop-blur-lg rounded-full shadow-2xl border border-gray-700 flex justify-around items-center p-1.5">
         {navItems.map((item) => {
           const Icon = item.icon;

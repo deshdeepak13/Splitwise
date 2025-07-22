@@ -524,7 +524,7 @@ const Friends = () => {
                         <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center">
                           {request.requester.avatar ? (
                             <img
-                              src={request.requester.avatar}
+                              src={request.requester.profilePic}
                               alt={request.requester.name}
                               className="w-full h-full rounded-full"
                             />
@@ -595,7 +595,7 @@ const Friends = () => {
                         <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center">
                           {request.recipient.avatar ? (
                             <img
-                              src={request.recipient.avatar}
+                              src={request.recipient.profilePic}
                               alt={request.recipient.name}
                               className="w-full h-full rounded-full"
                             />

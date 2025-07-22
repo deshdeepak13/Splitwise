@@ -16,7 +16,7 @@ const FriendCard = ({ friend }) => (
     >
       <div className="flex items-center gap-4">
         <div className="p-0.5 rounded-full bg-gray-700/80 group-hover:bg-blue-500 transition-colors duration-300">
-          <img src={friend.avatar} alt={friend.name} className="w-12 h-12 rounded-full object-cover" />
+          <img src={friend.profilePic} alt={friend.name} className="w-12 h-12 rounded-full object-cover" />
         </div>
         <div className="flex-grow">
           <p className="font-bold text-gray-100">{friend.name}</p>
