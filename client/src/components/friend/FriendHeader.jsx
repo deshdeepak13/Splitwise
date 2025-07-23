@@ -2,8 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const FriendHeader = ({ friend, onAddExpenseClick }) => {
-  console.log("l")
-  console.log(friend)
+  // console.log("l")
+  // console.log(friend)
   return (
     <div className="p-6 flex items-center gap-4 border-b border-slate-700 sticky top-0 bg-slate-800/80 backdrop-blur-sm z-10">
       <img
